@@ -1,0 +1,48 @@
+== FindByToParam
+
+Overriding to_param is the rails conventional way to modify your URLs, but I've you've chosen an identifier other than 'id' to put in your url, then you'll have to remember what that ID is when it comes time to retrieve the model in your controller code.
+
+Typical scenario:
+	default to_param leads to urls like: /users/1
+	
+	and then in controller 	
+		
+		def show
+			@user = User.find(params[:id])
+			...
+
+Overridden to_param scenario
+	User model has:
+	
+		def to_param
+			self.username
+		end
+		
+	leads to urls like: /users/jdoe
+		
+	and then in controller
+	
+		def show
+			@user = User.find_by_username(params[:id])
+			...
+			
+Notice in the 'overridden to_param scenario' above we've tightly coupled the behavior of to_param with the show action.  To eliminate this problem, I propose:
+
+	User model has:
+	
+		as_param :username
+		
+	and then in controller use:
+	
+		def show
+			@user = User.find_by_to_param(params[:id])
+			...
+			
+Now we can change the to_param without messing up the controller. And more importantly, we can more easily support default implementations of this part of the controller actions.
+
+	(Meaning, we can override the make_resourceful implementation of load_object to work universally across all resources, regardless of which define an alternative url param)
+
+
+Copyright (c) 2008-2010 3M. All rights reserved. Released under the MIT license.
+
+Authored by Jacob Burkhart.
