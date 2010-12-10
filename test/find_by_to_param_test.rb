@@ -9,7 +9,7 @@ RAILS_ENV = 'test' unless defined?(RAILS_ENV)
 #setup active record to use a sqlite database
 # ActiveRecord::Base.configurations = {"test"=>{"dbfile"=>"test.db", "adapter"=>"sqlite3"}}
 # ActiveRecord::Base.establish_connection
-ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :dbfile => ":memory:")
+ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
 
 #load the database schema for this test
 load File.expand_path(File.dirname(__FILE__) + "/mocks/schema.rb")
